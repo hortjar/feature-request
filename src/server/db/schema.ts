@@ -17,10 +17,12 @@ import { type AdapterAccount } from "next-auth/adapters";
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const mysqlTable = mysqlTableCreator((name) => `feature-request_${name}`);
+export const mysqlTable = mysqlTableCreator(
+  (name) => `feature-request_${name}`,
+);
 
-export const posts = mysqlTable(
-  "post",
+export const projects = mysqlTable(
+  "project",
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     name: varchar("name", { length: 256 }),
@@ -33,8 +35,45 @@ export const posts = mysqlTable(
   (example) => ({
     createdByIdIdx: index("createdById_idx").on(example.createdById),
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
 );
+
+export const projectRelations = relations(projects, ({ one }) => ({
+  createdBy: one(users, {
+    fields: [projects.createdById],
+    references: [users.id],
+  }),
+}));
+
+export const features = mysqlTable(
+  "feature",
+  {
+    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+    name: varchar("name", { length: 256 }),
+    content: text("content").notNull(),
+    projectId: bigint("projectId", { mode: "number" }),
+    createdById: varchar("createdById", { length: 255 }).notNull(),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt").onUpdateNow(),
+  },
+  (example) => ({
+    createdByIdIdx: index("createdById_idx").on(example.createdById),
+    nameIndex: index("name_idx").on(example.name),
+  }),
+);
+
+export const featuresRelations = relations(features, ({ one }) => ({
+  createdBy: one(users, {
+    fields: [features.createdById],
+    references: [users.id],
+  }),
+  project: one(projects, {
+    fields: [features.projectId],
+    references: [projects.id],
+  }),
+}));
 
 export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
@@ -71,7 +110,7 @@ export const accounts = mysqlTable(
   (account) => ({
     compoundKey: primaryKey(account.provider, account.providerAccountId),
     userIdIdx: index("userId_idx").on(account.userId),
-  })
+  }),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -89,7 +128,7 @@ export const sessions = mysqlTable(
   },
   (session) => ({
     userIdIdx: index("userId_idx").on(session.userId),
-  })
+  }),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -105,5 +144,5 @@ export const verificationTokens = mysqlTable(
   },
   (vt) => ({
     compoundKey: primaryKey(vt.identifier, vt.token),
-  })
+  }),
 );
