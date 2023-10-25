@@ -5,7 +5,8 @@ import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { Theme } from "@radix-ui/themes";
+import { Container, Theme } from "@radix-ui/themes";
+import Navbar from "./_components/layout/nav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +28,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${inter.variable}`}>
         <Theme appearance="dark">
-          <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
+          <TRPCReactProvider headers={headers()}>
+            <Container>
+              <Navbar />
+              {children}
+            </Container>
+          </TRPCReactProvider>
         </Theme>
       </body>
     </html>

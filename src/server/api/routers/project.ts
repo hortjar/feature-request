@@ -24,7 +24,7 @@ export const projectRouter = createTRPCRouter({
   }),
 
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.features.findMany({
+    return ctx.db.query.projects.findMany({
       orderBy: (projects, { desc }) => [desc(projects.createdAt)],
     });
   }),
