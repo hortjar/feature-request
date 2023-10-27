@@ -17,7 +17,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
-  const alignment = searchParams.get("align");
+  const alignment = searchParams.get("align") ?? "row";
 
   return (
     <>
@@ -45,7 +45,11 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
       </div>
       <div className={`flex flex-${alignment} flex-wrap gap-3`}>
         {projects.map((x) => (
-          <ProjectPreview key={x.id} project={x} />
+          <ProjectPreview
+            key={x.id}
+            project={x}
+            fullWidth={alignment == "col"}
+          />
         ))}
       </div>
     </>
