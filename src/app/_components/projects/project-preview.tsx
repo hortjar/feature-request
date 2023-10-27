@@ -1,4 +1,6 @@
+import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { Card, Heading, Inset, Text, Box } from "@radix-ui/themes";
+import Link from "next/link";
 import { type Project } from "~/server/db/types";
 
 export default function ProjectPreview({
@@ -8,19 +10,31 @@ export default function ProjectPreview({
   project: Project;
   fullWidth?: boolean;
 }) {
+  const iconSize = 25;
+
   return (
-    <Card
+    <Link
+      href={"/project"}
       className={`${
         fullWidth ? "w-full" : "w-[30%]"
-      } ring-slate-700 transition duration-100 hover:ring`}
+      } rounded-lg ring-slate-700 transition duration-100 hover:ring`}
     >
-      <Inset clip="padding-box" side="top" pb="current">
-        <Box width={"100%"} className="h-[150px]"></Box>
-      </Inset>
-      <Heading as="h1">{project.name}</Heading>
-      <Text as="p" className="text-slate-500">
-        {project.createdBy.name}
-      </Text>
-    </Card>
+      <Card>
+        <Inset clip="padding-box" side="top" pb="current">
+          <Box width={"100%"} className="h-[150px]"></Box>
+        </Inset>
+        <div className="flex flex-row">
+          <div className="flex flex-grow flex-col">
+            <Heading as="h1">{project.name}</Heading>
+            <Text as="p" className="text-slate-500">
+              {project.createdBy.name}
+            </Text>
+          </div>
+          <div className="flex w-6 items-center justify-center">
+            <ChevronRightIcon width={iconSize} height={iconSize} />
+          </div>
+        </div>
+      </Card>
+    </Link>
   );
 }
