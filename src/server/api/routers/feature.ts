@@ -44,6 +44,21 @@ export const featureRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.features.findMany({
         where: (features, { eq }) => eq(features.projectId, input),
+        with: {
+          createdBy: {
+            columns: {
+              name: true,
+              image: true,
+              id: true,
+            },
+          },
+          ratings: {
+            columns: {
+              value: true,
+              createdById: true,
+            },
+          },
+        },
       });
     }),
 });

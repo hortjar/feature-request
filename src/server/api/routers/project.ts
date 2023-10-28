@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { createId } from "~/lib/create-Id";
 
 import {
   createTRPCRouter,
@@ -12,6 +13,7 @@ export const projectRouter = createTRPCRouter({
     .input(z.object({ name: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(projects).values({
+        id: createId(),
         name: input.name,
         createdById: ctx.session.user.id,
       });
