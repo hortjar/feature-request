@@ -3,7 +3,7 @@ import { api } from "~/trpc/server";
 import { redirect } from "next/navigation";
 
 export default async function Project({ params }: { params: { id: string } }) {
-  const isValid = z.number().finite().safe().safeParse(Number(params.id));
+  const isValid = z.string().min(1).max(31).safeParse(params.id);
   if (!isValid.success) {
     redirect("/");
   }

@@ -5,6 +5,7 @@ import {
   int,
   mysqlTableCreator,
   primaryKey,
+  smallint,
   text,
   timestamp,
   varchar,
@@ -24,17 +25,17 @@ export const mysqlTable = mysqlTableCreator(
 export const projects = mysqlTable(
   "project",
   {
-    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    name: varchar("name", { length: 256 }),
+    id: varchar("id", { length: 31 }).primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
     createdById: varchar("createdById", { length: 255 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt").onUpdateNow(),
   },
-  (example) => ({
-    createdByIdIdx: index("createdById_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
+  (table) => ({
+    createdByIdIdx: index("createdById_idx").on(table.createdById),
+    nameIndex: index("name_idx").on(table.name),
   }),
 );
 
@@ -48,19 +49,19 @@ export const projectRelations = relations(projects, ({ one }) => ({
 export const features = mysqlTable(
   "feature",
   {
-    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    name: varchar("name", { length: 256 }),
+    id: varchar("id", { length: 31 }).primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
     content: text("content").notNull(),
-    projectId: bigint("projectId", { mode: "number" }),
+    projectId: varchar("projectId", { length: 31 }).notNull(),
     createdById: varchar("createdById", { length: 255 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt").onUpdateNow(),
   },
-  (example) => ({
-    createdByIdIdx: index("createdById_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
+  (table) => ({
+    createdByIdIdx: index("createdById_idx").on(table.createdById),
+    nameIndex: index("name_idx").on(table.name),
   }),
 );
 
@@ -72,6 +73,34 @@ export const featuresRelations = relations(features, ({ one }) => ({
   project: one(projects, {
     fields: [features.projectId],
     references: [projects.id],
+  }),
+}));
+
+export const ratings = mysqlTable(
+  "rating",
+  {
+    id: varchar("id", { length: 31 }).primaryKey(),
+    value: smallint("value").notNull(),
+    featureId: varchar("featureId", { length: 31 }).notNull(),
+    createdById: varchar("createdById", { length: 255 }).notNull(),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt").onUpdateNow(),
+  },
+  (table) => ({
+    createdByIdIdx: index("createdById_idx").on(table.createdById),
+  }),
+);
+
+export const ratingssRelations = relations(ratings, ({ one }) => ({
+  createdBy: one(users, {
+    fields: [ratings.createdById],
+    references: [users.id],
+  }),
+  feature: one(features, {
+    fields: [ratings.featureId],
+    references: [features.id],
   }),
 }));
 
@@ -107,9 +136,9 @@ export const accounts = mysqlTable(
     id_token: text("id_token"),
     session_state: varchar("session_state", { length: 255 }),
   },
-  (account) => ({
-    compoundKey: primaryKey(account.provider, account.providerAccountId),
-    userIdIdx: index("userId_idx").on(account.userId),
+  (table) => ({
+    compoundKey: primaryKey(table.provider, table.providerAccountId),
+    userIdIdx: index("userId_idx").on(table.userId),
   }),
 );
 
@@ -126,8 +155,8 @@ export const sessions = mysqlTable(
     userId: varchar("userId", { length: 255 }).notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
   },
-  (session) => ({
-    userIdIdx: index("userId_idx").on(session.userId),
+  (table) => ({
+    userIdIdx: index("userId_idx").on(table.userId),
   }),
 );
 
@@ -142,7 +171,7 @@ export const verificationTokens = mysqlTable(
     token: varchar("token", { length: 255 }).notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
   },
-  (vt) => ({
-    compoundKey: primaryKey(vt.identifier, vt.token),
+  (table) => ({
+    compoundKey: primaryKey(table.identifier, table.token),
   }),
 );

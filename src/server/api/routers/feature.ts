@@ -1,3 +1,4 @@
+import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
 
 import {
@@ -9,11 +10,19 @@ import { features } from "~/server/db/schema";
 
 export const featureRouter = createTRPCRouter({
   create: protectedProcedure
-    .input(z.object({ name: z.string().min(1), content: z.string().min(1) }))
+    .input(
+      z.object({
+        name: z.string().min(1),
+        content: z.string().min(1),
+        projectId: z.string().min(1).max(31),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(features).values({
+        id: createId(),
         name: input.name,
         content: input.content,
+        projectId: input.projectId,
         createdById: ctx.session.user.id,
       });
     }),
@@ -31,7 +40,7 @@ export const featureRouter = createTRPCRouter({
   }),
 
   getForProject: publicProcedure
-    .input(z.number().finite().safe())
+    .input(z.string().min(1).max(31))
     .query(({ ctx, input }) => {
       return ctx.db.query.features.findMany({
         where: (features, { eq }) => eq(features.projectId, input),
