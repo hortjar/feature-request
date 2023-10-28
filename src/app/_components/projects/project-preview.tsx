@@ -14,7 +14,7 @@ export default function ProjectPreview({
 
   return (
     <Link
-      href={"/project"}
+      href={`/project/${project.id}`}
       className={`${
         fullWidth ? "w-full" : "w-[30%]"
       } rounded-lg ring-slate-700 transition duration-100 hover:ring`}

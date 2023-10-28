@@ -29,4 +29,12 @@ export const featureRouter = createTRPCRouter({
       orderBy: (features, { desc }) => [desc(features.createdAt)],
     });
   }),
+
+  getForProject: publicProcedure
+    .input(z.number().finite().safe())
+    .query(({ ctx, input }) => {
+      return ctx.db.query.features.findMany({
+        where: (features, { eq }) => eq(features.projectId, input),
+      });
+    }),
 });
