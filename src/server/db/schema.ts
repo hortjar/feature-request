@@ -65,7 +65,7 @@ export const features = mysqlTable(
   }),
 );
 
-export const featuresRelations = relations(features, ({ one }) => ({
+export const featuresRelations = relations(features, ({ one, many }) => ({
   createdBy: one(users, {
     fields: [features.createdById],
     references: [users.id],
@@ -74,6 +74,7 @@ export const featuresRelations = relations(features, ({ one }) => ({
     fields: [features.projectId],
     references: [projects.id],
   }),
+  ratings: many(ratings),
 }));
 
 export const ratings = mysqlTable(
