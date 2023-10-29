@@ -23,7 +23,9 @@ export default function ProjectList({
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
-  const alignment = searchParams.get("align") ?? "row";
+  const defaultAlign = localStorage.getItem("align");
+  const alignment = searchParams.get("align") ?? defaultAlign ?? "row";
+  localStorage.setItem("align", alignment);
 
   return (
     <>
