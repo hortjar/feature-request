@@ -7,8 +7,6 @@ import FeatureRating from "./feature-rating";
 export default async function Feature({ feature }: { feature: Feature }) {
   const session = await getServerAuthSession();
 
-  console.log(feature.ratings);
-
   return (
     <div
       key={feature.id}
