@@ -2,15 +2,15 @@ import { Button, Heading } from "@radix-ui/themes";
 import { getServerAuthSession } from "~/server/auth";
 import UserPanel from "./user-panel";
 import Link from "next/link";
-import { CaretDownIcon, EnterIcon, PersonIcon } from "@radix-ui/react-icons";
+import { EnterIcon } from "@radix-ui/react-icons";
 
 export default async function Navbar() {
   const session = await getServerAuthSession();
 
   return (
-    <nav className="flex flex-row items-center justify-between">
+    <nav className="flex flex-row items-center justify-between py-4">
       <Link href="/">
-        <Heading>Feature Requests</Heading>
+        <Heading size={"7"}>Feature Requests</Heading>
       </Link>
       {session?.user.name != null ? (
         <UserPanel userName={session.user.name} />

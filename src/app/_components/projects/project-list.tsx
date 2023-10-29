@@ -6,14 +6,20 @@ import Link from "next/link";
 import { createUrlFromObject } from "~/lib/utils";
 import { usePathname, useSearchParams } from "next/navigation";
 import ProjectPreview from "./project-preview";
-import { IconButton } from "@radix-ui/themes";
+import { Heading, IconButton } from "@radix-ui/themes";
 
 const alignments = [
   { align: "col", icon: <BoxIcon /> },
   { align: "row", icon: <DashboardIcon /> },
 ];
 
-export default function ProjectList({ projects }: { projects: Project[] }) {
+export default function ProjectList({
+  projects,
+  headingText,
+}: {
+  projects: Project[];
+  headingText: string;
+}) {
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
@@ -21,7 +27,10 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
   return (
     <>
-      <div className="flex flex-row gap-3">
+      <div className="flex flex-row items-center justify-between gap-3">
+        <Heading as="h2" size={"5"}>
+          {headingText}
+        </Heading>
         <div className="flex flex-row">
           {alignments.map((x) => {
             return (

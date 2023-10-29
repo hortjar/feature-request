@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { Container, Theme } from "@radix-ui/themes";
-import Navbar from "./_components/layout/nav";
+import Navbar from "./_components/layout/navbar";
 
 const inter = Inter({
   subsets: ["latin"],

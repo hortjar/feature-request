@@ -30,6 +30,7 @@ export const projectRouter = createTRPCRouter({
       with: {
         createdBy: {
           columns: {
+            id: true,
             name: true,
             image: true,
           },
@@ -38,4 +39,22 @@ export const projectRouter = createTRPCRouter({
       orderBy: (projects, { desc }) => [desc(projects.createdAt)],
     });
   }),
+
+  getAllForUser: protectedProcedure
+    .input(z.string().min(1).max(255))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.projects.findMany({
+        where: (projects, { eq }) => eq(projects.createdById, input),
+        with: {
+          createdBy: {
+            columns: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
+        },
+        orderBy: (projects, { desc }) => [desc(projects.createdAt)],
+      });
+    }),
 });
