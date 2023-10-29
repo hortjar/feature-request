@@ -54,6 +54,7 @@ export const featureRouter = createTRPCRouter({
           },
           ratings: {
             columns: {
+              id: true,
               value: true,
               createdById: true,
             },

@@ -11,7 +11,11 @@ export type User =
 
 export type Rating =
   | InferSelectModel<typeof ratings>
-  | { value: number; createdById: string };
+  | {
+      id: string;
+      value: number;
+      createdById: string;
+    };
 
 export type Project = InferSelectModel<typeof projects> & {
   createdBy: User;
