@@ -11,8 +11,8 @@ export default function CreateProject() {
   const nameRef = useRef<HTMLInputElement>(null);
 
   const createProject = api.project.create.useMutation({
-    onSuccess: () => {
-      router.refresh();
+    onSuccess: (data) => {
+      router.push("/project/" + data);
     },
   });
 

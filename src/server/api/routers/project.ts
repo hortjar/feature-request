@@ -11,12 +11,15 @@ import { projects } from "~/server/db/schema";
 export const projectRouter = createTRPCRouter({
   create: protectedProcedure
     .input(z.object({ name: z.string().min(1) }))
+    .output(z.string().min(1).max(31))
     .mutation(async ({ ctx, input }) => {
+      const id = createId();
       await ctx.db.insert(projects).values({
-        id: createId(),
+        id: id,
         name: input.name,
         createdById: ctx.session.user.id,
       });
+      return id;
     }),
 
   getLatest: publicProcedure.query(({ ctx }) => {

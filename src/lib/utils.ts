@@ -24,3 +24,20 @@ export const createUrlFromObject = (
   }
   return createUrl(pathname, urlParams);
 };
+
+export const getAndSetDefaultAlignment = (
+  searchParams: ReadonlyURLSearchParams,
+) => {
+  let defaultAlign = "row";
+  if (typeof window !== "undefined") {
+    defaultAlign = localStorage.getItem("align") ?? "row";
+  }
+
+  const alignment = searchParams.get("align") ?? defaultAlign ?? "row";
+
+  if (typeof window !== "undefined") {
+    localStorage.setItem("align", alignment);
+  }
+
+  return alignment;
+};
