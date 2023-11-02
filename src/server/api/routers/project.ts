@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createId } from "~/lib/create-Id";
+import { createProjectInput } from "~/lib/inputs";
 
 import {
   createTRPCRouter,
@@ -10,7 +11,7 @@ import { projects } from "~/server/db/schema";
 
 export const projectRouter = createTRPCRouter({
   create: protectedProcedure
-    .input(z.object({ name: z.string().min(1) }))
+    .input(createProjectInput)
     .output(z.string().min(1).max(31))
     .mutation(async ({ ctx, input }) => {
       const id = createId();
@@ -22,11 +23,13 @@ export const projectRouter = createTRPCRouter({
       return id;
     }),
 
-  getLatest: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.projects.findFirst({
-      orderBy: (projects, { desc }) => [desc(projects.createdAt)],
-    });
-  }),
+  getById: publicProcedure
+    .input(z.string().min(1).max(31))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.projects.findFirst({
+        where: (projects, { eq }) => eq(projects.id, input),
+      });
+    }),
 
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.projects.findMany({

@@ -10,10 +10,16 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
   const alignment = getAndSetDefaultAlignment(searchParams);
 
   return (
-    <div className={`flex flex-${alignment} flex-wrap gap-3`}>
-      {projects.map((x) => (
-        <ProjectPreview key={x.id} project={x} fullWidth={alignment == "col"} />
-      ))}
-    </div>
+    <>
+      <div className={`flex flex-${alignment} flex-wrap gap-3`}>
+        {projects.map((x) => (
+          <ProjectPreview
+            key={x.id}
+            project={x}
+            fullWidth={alignment == "col"}
+          />
+        ))}
+      </div>
+    </>
   );
 }

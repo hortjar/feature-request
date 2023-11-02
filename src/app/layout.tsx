@@ -29,10 +29,10 @@ export default function RootLayout({
       <body className={`font-sans ${inter.variable}`}>
         <Theme appearance="dark">
           <TRPCReactProvider headers={headers()}>
-            <Container>
+            <>
               <Navbar />
-              {children}
-            </Container>
+              <Container>{children}</Container>
+            </>
           </TRPCReactProvider>
         </Theme>
       </body>
