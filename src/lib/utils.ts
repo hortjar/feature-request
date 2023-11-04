@@ -12,17 +12,18 @@ export const createUrl = (
 
 export const createUrlFromObject = (
   pathname: string,
-  params: Record<string, string>,
+  params: URLSearchParams | ReadonlyURLSearchParams,
+  newParams: Record<string, string>,
 ) => {
-  const urlParams = new URLSearchParams();
-  for (const key in params) {
-    if (!Object.hasOwn(params, key)) {
+  const searchParams = new URLSearchParams(params);
+  for (const key in newParams) {
+    if (!Object.hasOwn(newParams, key)) {
       continue;
     }
-    const value = params[key]!;
-    urlParams.set(key, value);
+    const value = newParams[key]!;
+    searchParams.set(key, value);
   }
-  return createUrl(pathname, urlParams);
+  return createUrl(pathname, searchParams);
 };
 
 export const getAndSetDefaultAlignment = (
@@ -42,16 +43,32 @@ export const getAndSetDefaultAlignment = (
   return alignment;
 };
 
-export const getCurrentPage = (searchParams: ReadonlyURLSearchParams) => {
-  const page = searchParams.get("page") ?? "0";
+const getValueForKey = (obj: Record<string, string>, key: string) => {
+  if (Object.keys(obj).find((key) => key == key) === undefined) {
+    return null;
+  }
+  return obj[key];
+};
+
+export const getCurrentPage = (
+  serverSearchParams: ReadonlyURLSearchParams | URLSearchParams,
+) => {
+  const page = serverSearchParams.get("page") ?? "1";
   return Number(page);
 };
 
-export const getCurrentLimit = (searchParams: ReadonlyURLSearchParams) => {
-  const limit = searchParams.get("limit") ?? "10";
+export const getCurrentLimit = (
+  serverSearchParams: ReadonlyURLSearchParams | URLSearchParams,
+) => {
+  const limit = serverSearchParams.get("limit") ?? "10";
   return Number(limit);
 };
 
-export const getPageAndLimit = (searchParams: ReadonlyURLSearchParams) => {
-  return [getCurrentPage(searchParams), getCurrentLimit(searchParams)];
+export const getPageAndLimit = (
+  serverSearchParams: ReadonlyURLSearchParams | URLSearchParams,
+) => {
+  return [
+    getCurrentPage(serverSearchParams),
+    getCurrentLimit(serverSearchParams),
+  ];
 };

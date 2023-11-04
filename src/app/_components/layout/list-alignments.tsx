@@ -6,12 +6,12 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { createUrlFromObject, getAndSetDefaultAlignment } from "~/lib/utils";
 
-export default function ListAlignments() {
-  const alignments = [
-    { align: "col", icon: <BoxIcon /> },
-    { align: "row", icon: <DashboardIcon /> },
-  ];
+const alignments = [
+  { align: "col", icon: <BoxIcon /> },
+  { align: "row", icon: <DashboardIcon /> },
+];
 
+export default function ListAlignments() {
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
@@ -23,7 +23,9 @@ export default function ListAlignments() {
         return (
           <Link
             key={x.align}
-            href={createUrlFromObject(pathname, { align: x.align })}
+            href={createUrlFromObject(pathname, searchParams, {
+              align: x.align,
+            })}
           >
             <IconButton
               radius="none"

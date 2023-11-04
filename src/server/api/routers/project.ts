@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { z } from "zod";
 import { createId } from "~/lib/create-Id";
 import { createProjectInput } from "~/lib/inputs";
@@ -78,7 +79,7 @@ export const projectRouter = createTRPCRouter({
     )
     .query(({ ctx, input }) => {
       return ctx.db.query.projects.findMany({
-        offset: input.offset,
+        offset: (input.offset - 1) * input.limit,
         limit: input.limit,
         with: {
           features: {
@@ -97,4 +98,8 @@ export const projectRouter = createTRPCRouter({
         orderBy: (projects, { desc }) => [desc(projects.createdAt)],
       });
     }),
+
+  getAllCount: publicProcedure.query(({ ctx }) => {
+    return ctx.db.select({ count: sql`COUNT(*)` }).from(projects);
+  }),
 });
