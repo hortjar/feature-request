@@ -41,3 +41,17 @@ export const getAndSetDefaultAlignment = (
 
   return alignment;
 };
+
+export const getCurrentPage = (searchParams: ReadonlyURLSearchParams) => {
+  const page = searchParams.get("page") ?? "0";
+  return Number(page);
+};
+
+export const getCurrentLimit = (searchParams: ReadonlyURLSearchParams) => {
+  const limit = searchParams.get("limit") ?? "10";
+  return Number(limit);
+};
+
+export const getPageAndLimit = (searchParams: ReadonlyURLSearchParams) => {
+  return [getCurrentPage(searchParams), getCurrentLimit(searchParams)];
+};

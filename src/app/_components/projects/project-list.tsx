@@ -11,7 +11,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
   return (
     <>
-      <div className={`flex flex-${alignment} flex-wrap gap-3`}>
+      <div className={`flex flex-${alignment} flex-wrap gap-3 pb-5`}>
         {projects.map((x) => (
           <ProjectPreview
             key={x.id}

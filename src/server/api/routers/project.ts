@@ -34,6 +34,11 @@ export const projectRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.projects.findMany({
       with: {
+        features: {
+          columns: {
+            id: true,
+          },
+        },
         createdBy: {
           columns: {
             id: true,
@@ -52,6 +57,35 @@ export const projectRouter = createTRPCRouter({
       return ctx.db.query.projects.findMany({
         where: (projects, { eq }) => eq(projects.createdById, input),
         with: {
+          createdBy: {
+            columns: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
+        },
+        orderBy: (projects, { desc }) => [desc(projects.createdAt)],
+      });
+    }),
+
+  getPaged: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().finite().positive(),
+        offset: z.number().finite().positive(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.query.projects.findMany({
+        offset: input.offset,
+        limit: input.limit,
+        with: {
+          features: {
+            columns: {
+              id: true,
+            },
+          },
           createdBy: {
             columns: {
               id: true,

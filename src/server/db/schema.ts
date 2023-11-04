@@ -39,11 +39,12 @@ export const projects = mysqlTable(
   }),
 );
 
-export const projectRelations = relations(projects, ({ one }) => ({
+export const projectRelations = relations(projects, ({ one, many }) => ({
   createdBy: one(users, {
     fields: [projects.createdById],
     references: [users.id],
   }),
+  features: many(features),
 }));
 
 export const features = mysqlTable(
