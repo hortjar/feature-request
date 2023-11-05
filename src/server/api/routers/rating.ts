@@ -1,6 +1,7 @@
 import { createId } from "@paralleldrive/cuid2";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { schemas } from "~/lib/zod-schemas";
 
 import {
   createTRPCRouter,
@@ -13,9 +14,9 @@ export const ratingRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        featureId: z.string().min(1).max(31),
-        createdById: z.string().min(1).max(255),
-        value: z.number().min(-1).max(1),
+        featureId: schemas.id,
+        createdById: schemas.userId,
+        value: schemas.ratingValue,
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -30,10 +31,10 @@ export const ratingRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        id: z.string().min(1).max(31),
-        featureId: z.string().min(1).max(31),
-        createdById: z.string().min(1).max(255),
-        value: z.number().min(-1).max(1),
+        id: schemas.id,
+        featureId: schemas.id,
+        createdById: schemas.userId,
+        value: schemas.ratingValue,
       }),
     )
     .mutation(async ({ ctx, input }) => {

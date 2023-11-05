@@ -1,5 +1,6 @@
 import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
+import { schemas } from "~/lib/zod-schemas";
 
 import {
   createTRPCRouter,
@@ -12,9 +13,9 @@ export const featureRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        name: z.string().min(1),
-        content: z.string().min(1),
-        projectId: z.string().min(1).max(31),
+        name: schemas.name,
+        content: schemas.content,
+        projectId: schemas.id,
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -39,27 +40,25 @@ export const featureRouter = createTRPCRouter({
     });
   }),
 
-  getForProject: publicProcedure
-    .input(z.string().min(1).max(31))
-    .query(({ ctx, input }) => {
-      return ctx.db.query.features.findMany({
-        where: (features, { eq }) => eq(features.projectId, input),
-        with: {
-          createdBy: {
-            columns: {
-              name: true,
-              image: true,
-              id: true,
-            },
-          },
-          ratings: {
-            columns: {
-              id: true,
-              value: true,
-              createdById: true,
-            },
+  getForProject: publicProcedure.input(schemas.id).query(({ ctx, input }) => {
+    return ctx.db.query.features.findMany({
+      where: (features, { eq }) => eq(features.projectId, input),
+      with: {
+        createdBy: {
+          columns: {
+            name: true,
+            image: true,
+            id: true,
           },
         },
-      });
-    }),
+        ratings: {
+          columns: {
+            id: true,
+            value: true,
+            createdById: true,
+          },
+        },
+      },
+    });
+  }),
 });

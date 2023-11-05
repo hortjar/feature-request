@@ -3,9 +3,10 @@ import { api } from "~/trpc/server";
 import { redirect } from "next/navigation";
 import Feature from "~/app/_components/features/feature";
 import { Heading } from "@radix-ui/themes";
+import { schemas } from "~/lib/zod-schemas";
 
 export default async function Project({ params }: { params: { id: string } }) {
-  const isValid = z.string().min(1).max(31).safeParse(params.id);
+  const isValid = schemas.id.safeParse(params.id);
   if (!isValid.success) {
     redirect("/");
   }
