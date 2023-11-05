@@ -27,7 +27,7 @@ export const createUrlFromObject = (
 };
 
 export const getAndSetDefaultAlignment = (
-  searchParams: ReadonlyURLSearchParams,
+  searchParams: URLSearchParams | ReadonlyURLSearchParams,
 ) => {
   let defaultAlign = "row";
   if (typeof window !== "undefined") {
@@ -40,6 +40,7 @@ export const getAndSetDefaultAlignment = (
     localStorage.setItem("align", alignment);
   }
 
+  console.log("Alignment is", alignment);
   return alignment;
 };
 

@@ -37,7 +37,7 @@ export default function Pagination({
           href={createUrlFromObject(pathname, params, {
             page: getNextPageNumber(-1).toString(),
           })}
-          className="mt-1"
+          className="mt-1 cursor-pointer"
         >
           <IconButton variant="ghost" color="gray">
             <ChevronLeftIcon />
@@ -50,6 +50,7 @@ export default function Pagination({
                 page: (page + 1).toString(),
               })}
               key={"page_" + page + 1}
+              className="cursor-pointer"
             >
               <Button
                 variant="ghost"
@@ -64,7 +65,7 @@ export default function Pagination({
           href={createUrlFromObject(pathname, params, {
             page: getNextPageNumber(1).toString(),
           })}
-          className="mt-1"
+          className="mt-1 cursor-pointer"
         >
           <IconButton variant="ghost" color="gray">
             <ChevronRightIcon />
@@ -78,6 +79,7 @@ export default function Pagination({
             href={createUrlFromObject(pathname, params, {
               limit: limit.toString(),
             })}
+            className="cursor-pointer"
           >
             <Button
               variant="ghost"
