@@ -1,15 +1,17 @@
-import { z } from "zod";
 import { api } from "~/trpc/server";
 import { redirect } from "next/navigation";
 import Feature from "~/app/_components/features/feature";
 import { Heading } from "@radix-ui/themes";
 import { schemas } from "~/lib/zod-schemas";
+import { getServerAuthSession } from "~/server/auth";
 
 export default async function Project({ params }: { params: { id: string } }) {
   const isValid = schemas.id.safeParse(params.id);
   if (!isValid.success) {
     redirect("/");
   }
+
+  const session = await getServerAuthSession();
   const features = await api.feature.getForProject.query(isValid.data);
   const project = await api.project.getById.query(isValid.data);
   return (

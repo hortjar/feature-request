@@ -1,10 +1,8 @@
 import { api } from "~/trpc/server";
 import ProjectList from "./_components/projects/project-list";
-import { Suspense, cache } from "react";
-import { Heading } from "@radix-ui/themes";
-import ListAlignments from "./_components/layout/list-alignments";
+import { cache } from "react";
 import { getPageAndLimit } from "~/lib/utils";
-import Pagination from "./_components/layout/pagination";
+import { List } from "./_components/layout/list";
 
 const getPaged = cache(async (limit: number, offset: number) => {
   const projects = await api.project.getPaged.query({
@@ -26,20 +24,14 @@ export default async function Home({
   >;
   return (
     <main className="flex flex-col gap-5 pb-7">
-      <div className="flex flex-row items-center justify-between gap-3">
-        <Heading as="h2" size={"5"}>
-          All Projects
-        </Heading>
-        <ListAlignments />
-      </div>
-      <Suspense fallback={<div>Loading!</div>}>
+      <List
+        title="All Projects"
+        page={page ?? 1}
+        limit={limit ?? 10}
+        allCount={allCount[0]!.count ?? 1}
+      >
         <ProjectList projects={projects} />
-      </Suspense>
-      <Pagination
-        allCount={allCount[0]?.count ?? 0}
-        currentPage={page ?? 1}
-        currentLimit={limit ?? 10}
-      />
+      </List>
     </main>
   );
 }
