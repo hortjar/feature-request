@@ -4,6 +4,7 @@ import { BoxIcon, DashboardIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { type FC } from "react";
 import { createUrlFromObject, getAndSetDefaultAlignment } from "~/lib/utils";
 
 const alignments = [
@@ -11,7 +12,7 @@ const alignments = [
   { align: "row", icon: <DashboardIcon /> },
 ];
 
-export default function ListAlignments() {
+export const ListAlignments: FC = () => {
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
@@ -41,4 +42,4 @@ export default function ListAlignments() {
       })}
     </div>
   );
-}
+};

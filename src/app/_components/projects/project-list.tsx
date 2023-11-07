@@ -1,11 +1,16 @@
 "use client";
 
 import { type Project } from "~/server/db/types";
-import ProjectPreview from "./project-preview";
+import { ProjectPreview } from "./project-preview";
 import { useSearchParams } from "next/navigation";
 import { getAndSetDefaultAlignment } from "~/lib/utils";
+import { type FC } from "react";
 
-export default function ProjectList({ projects }: { projects: Project[] }) {
+interface ProjectListProps {
+  projects: Project[];
+}
+
+export const ProjectList: FC<ProjectListProps> = (props) => {
   const searchParams = useSearchParams();
   const alignment = getAndSetDefaultAlignment(searchParams);
 
@@ -13,7 +18,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
   return (
     <>
       <div className={`flex flex-${alignment} flex-wrap gap-3 pb-5`}>
-        {projects.map((x) => (
+        {props.projects.map((x) => (
           <ProjectPreview
             key={x.id}
             project={x}
@@ -23,4 +28,4 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
       </div>
     </>
   );
-}
+};

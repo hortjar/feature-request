@@ -4,14 +4,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as Form from "@radix-ui/react-form";
 import { Button, Heading } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
+import { type FC } from "react";
 import { useForm } from "react-hook-form";
-import { type z } from "zod";
-import { createProjectInput } from "~/lib/inputs";
+import { z } from "zod";
+import { schemas } from "~/lib/zod-schemas";
 import { api } from "~/trpc/react";
 
+const createProjectInput = z.object({
+  name: schemas.name,
+  websiteUrl: schemas.websiteUrl,
+  githubUrl: schemas.githubUrl,
+});
 type FormData = z.infer<typeof createProjectInput>;
 
-export default function CreateProject() {
+export const CreateProject: FC = () => {
   const {
     handleSubmit,
     register,
@@ -121,4 +127,4 @@ export default function CreateProject() {
       </Form.Submit>
     </Form.Root>
   );
-}
+};

@@ -1,10 +1,11 @@
 import { Button, Container, Heading } from "@radix-ui/themes";
 import { getServerAuthSession } from "~/server/auth";
-import UserPanel from "./user-panel";
+import { UserPanel } from "./user-panel";
 import Link from "next/link";
 import { EnterIcon } from "@radix-ui/react-icons";
+import { type FC } from "react";
 
-export default async function Navbar() {
+export const Navbar: FC = async () => {
   const session = await getServerAuthSession();
 
   return (
@@ -34,4 +35,4 @@ export default async function Navbar() {
       </Container>
     </nav>
   );
-}
+};

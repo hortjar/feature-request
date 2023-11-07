@@ -9,8 +9,13 @@ import {
 } from "@radix-ui/react-icons";
 import { Button, DropdownMenu } from "@radix-ui/themes";
 import Link from "next/link";
+import { type FC } from "react";
 
-export default function UserPanel({ userName }: { userName: string }) {
+interface UserPanelProps {
+  userName: string;
+}
+
+export const UserPanel: FC<UserPanelProps> = (props) => {
   const linkClass = "flex flex-row items-center gap-3";
 
   return (
@@ -23,7 +28,7 @@ export default function UserPanel({ userName }: { userName: string }) {
           className="text-md flex cursor-pointer flex-row items-center justify-center gap-3 p-3"
         >
           <PersonIcon width={20} height={20} />
-          <span className="text-[1.1em]">{userName}</span>
+          <span className="text-[1.1em]">{props.userName}</span>
           <CaretDownIcon />
         </Button>
       </DropdownMenu.Trigger>
@@ -56,4 +61,4 @@ export default function UserPanel({ userName }: { userName: string }) {
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
-}
+};

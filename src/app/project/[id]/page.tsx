@@ -1,6 +1,6 @@
 import { api } from "~/trpc/server";
 import { redirect } from "next/navigation";
-import Feature from "~/app/_components/features/feature";
+import { FeaturePreview } from "~/app/_components/features/feature-preview";
 import { Heading } from "@radix-ui/themes";
 import { schemas } from "~/lib/zod-schemas";
 import { getServerAuthSession } from "~/server/auth";
@@ -29,7 +29,7 @@ export default async function Project({ params }: { params: { id: string } }) {
       </div>
       <div className="flex flex-col gap-3">
         {features.map((feature) => (
-          <Feature key={feature.id} feature={feature} />
+          <FeaturePreview key={feature.id} feature={feature} />
         ))}
       </div>
     </div>

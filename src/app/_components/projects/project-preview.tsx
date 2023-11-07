@@ -5,22 +5,22 @@ import {
 } from "@radix-ui/react-icons";
 import { Card, Heading, Inset, Text, Box } from "@radix-ui/themes";
 import Link from "next/link";
+import { type FC } from "react";
 import { type Project } from "~/server/db/types";
 
-export default function ProjectPreview({
-  project,
-  fullWidth = false,
-}: {
+interface ProjectPreviewProps {
   project: Project;
   fullWidth?: boolean;
-}) {
+}
+
+export const ProjectPreview: FC<ProjectPreviewProps> = (props) => {
   const iconSize = 25;
 
   return (
     <Link
-      href={`/project/${project.id}`}
+      href={`/project/${props.project.id}`}
       className={`${
-        fullWidth ? "w-full" : "w-[32.6%]"
+        props.fullWidth ? "w-full" : "w-[32.6%]"
       } rounded-lg ring-slate-700 transition duration-100 hover:ring`}
     >
       <Card>
@@ -30,12 +30,12 @@ export default function ProjectPreview({
         <div className="flex flex-row">
           <div className="gap flex flex-grow flex-col">
             <Heading as="h1" className="pb-1">
-              {project.name}
+              {props.project.name}
             </Heading>
             <div className="flex flex-row gap-3 text-slate-300">
               <div className="flex flex-row items-center gap-2">
                 <PersonIcon />
-                <Text as="p">{project.createdBy.name}</Text>
+                <Text as="p">{props.project.createdBy.name}</Text>
               </div>
               <div className="flex flex-row items-center gap-2">
                 <ChatBubbleIcon />
@@ -50,4 +50,4 @@ export default function ProjectPreview({
       </Card>
     </Link>
   );
-}
+};

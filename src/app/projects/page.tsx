@@ -1,6 +1,6 @@
 import { api } from "~/trpc/server";
 import { cache } from "react";
-import ProjectList from "../_components/projects/project-list";
+import { ProjectList } from "../_components/projects/project-list";
 import { getServerAuthSession } from "~/server/auth";
 import { redirect } from "next/navigation";
 import { getPageAndLimit } from "~/lib/utils";

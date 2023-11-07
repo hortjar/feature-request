@@ -3,26 +3,25 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
+import { type FC } from "react";
 import { type Rating } from "~/server/db/types";
 import { api } from "~/trpc/react";
 
-export default function ExportRating({
-  ratings,
-  userId,
-  featureId,
-}: {
+interface FeatureRating {
   ratings: Array<Rating>;
   userId: string | undefined;
   featureId: string;
-}) {
+}
+
+export const FeatureRating: FC<FeatureRating> = (props) => {
   const router = useRouter();
 
   const iconSize = 26;
 
   function hasUserRated(value: number) {
     return (
-      ratings.find(
-        (rating) => rating.value == value && rating.createdById == userId,
+      props.ratings.find(
+        (rating) => rating.value == value && rating.createdById == props.userId,
       ) != undefined
     );
   }
@@ -35,7 +34,7 @@ export default function ExportRating({
 
   const updateRating = api.rating.update.useMutation({
     onSuccess: (data, { id, value, featureId }) => {
-      const existingRating = ratings.find((rating) => rating.id == id);
+      const existingRating = props.ratings.find((rating) => rating.id == id);
       if (existingRating) {
         existingRating.value = value;
       }
@@ -43,26 +42,26 @@ export default function ExportRating({
   });
 
   async function submitRating(value: number) {
-    if (!userId) {
+    if (!props.userId) {
       return;
     }
 
-    const existingRating = ratings.find(
-      (rating) => rating.createdById == userId,
+    const existingRating = props.ratings.find(
+      (rating) => rating.createdById == props.userId,
     );
 
     if (existingRating) {
       await updateRating.mutateAsync({
         id: existingRating.id,
         value: existingRating?.value == value ? 0 : value,
-        createdById: userId,
-        featureId: featureId,
+        createdById: props.userId,
+        featureId: props.featureId,
       });
     } else {
       await createRating.mutateAsync({
         value: value,
-        createdById: userId,
-        featureId: featureId,
+        createdById: props.userId,
+        featureId: props.featureId,
       });
     }
   }
@@ -73,37 +72,37 @@ export default function ExportRating({
         variant="ghost"
         radius="full"
         color="orange"
-        className={userId ? "cursor-pointer" : "cursor-default"}
-        disabled={userId == undefined}
+        className={props.userId ? "cursor-pointer" : "cursor-default"}
+        disabled={props.userId == undefined}
         onClick={() => submitRating(1)}
       >
         <ChevronUpIcon
           width={iconSize}
           height={iconSize}
-          className={`${userId ? "cursor-pointer" : "cursor-default"} ${
+          className={`${props.userId ? "cursor-pointer" : "cursor-default"} ${
             hasUserRated(1) ? "text-orange-300" : "text-slate-200"
           }`}
         />
       </IconButton>
       <span className="font-semibold">
-        {ratings.reduce((sum, rating) => sum + rating.value, 0)}
+        {props.ratings.reduce((sum, rating) => sum + rating.value, 0)}
       </span>
       <IconButton
         variant="ghost"
         radius="full"
         color="indigo"
-        className={userId ? "cursor-pointer" : "cursor-default"}
-        disabled={userId == undefined}
+        className={props.userId ? "cursor-pointer" : "cursor-default"}
+        disabled={props.userId == undefined}
         onClick={() => submitRating(-1)}
       >
         <ChevronDownIcon
           width={iconSize}
           height={iconSize}
-          className={`${userId ? "cursor-pointer" : "cursor-default"} ${
+          className={`${props.userId ? "cursor-pointer" : "cursor-default"} ${
             hasUserRated(-1) ? "text-blue-300" : "text-slate-300"
           }`}
         />
       </IconButton>
     </div>
   );
-}
+};

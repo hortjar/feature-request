@@ -1,7 +1,7 @@
 import { Heading } from "@radix-ui/themes";
 import { type FC, type PropsWithChildren, Suspense } from "react";
-import ListAlignments from "./list-alignments";
-import Pagination from "./pagination";
+import { ListAlignments } from "./list-alignments";
+import { Pagination } from "./pagination";
 
 interface ListProps extends PropsWithChildren {
   title: string;

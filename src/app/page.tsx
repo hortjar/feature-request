@@ -1,5 +1,5 @@
 import { api } from "~/trpc/server";
-import ProjectList from "./_components/projects/project-list";
+import { ProjectList } from "./_components/projects/project-list";
 import { cache } from "react";
 import { getPageAndLimit } from "~/lib/utils";
 import { List } from "./_components/layout/list";

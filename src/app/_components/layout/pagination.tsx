@@ -1,27 +1,26 @@
 "use client";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import { Button, IconButton, Text } from "@radix-ui/themes";
+import { Button, IconButton } from "@radix-ui/themes";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { type FC } from "react";
 import { createUrlFromObject } from "~/lib/utils";
 
-export default function Pagination({
-  allCount,
-  currentPage,
-  currentLimit,
-}: {
+interface PaginationProps {
   allCount: number;
   currentPage: number;
   currentLimit: number;
-}) {
+}
+
+export const Pagination: FC<PaginationProps> = (props) => {
   const pathname = usePathname();
   const params = useSearchParams();
-  const pagecount = Math.ceil(allCount / currentLimit);
+  const pagecount = Math.ceil(props.allCount / props.currentLimit);
   const limitOptions = [10, 25, 50, 100];
 
   function getNextPageNumber(offset: number) {
-    const nextPage = currentPage + offset;
+    const nextPage = props.currentPage + offset;
     if (nextPage < 1) {
       return 1;
     } else if (nextPage > pagecount) {
@@ -54,7 +53,7 @@ export default function Pagination({
             >
               <Button
                 variant="ghost"
-                color={page + 1 == currentPage ? "iris" : "gray"}
+                color={page + 1 == props.currentPage ? "iris" : "gray"}
               >
                 {page + 1}
               </Button>
@@ -83,7 +82,7 @@ export default function Pagination({
           >
             <Button
               variant="ghost"
-              color={limit == currentLimit ? "iris" : "gray"}
+              color={limit == props.currentLimit ? "iris" : "gray"}
             >
               {limit}
             </Button>
@@ -92,4 +91,4 @@ export default function Pagination({
       </div>
     </div>
   );
-}
+};
