@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .hoverable-card {
+    @apply ring-slate-700 transition duration-100 hover:ring rounded-lg
+  }
+}

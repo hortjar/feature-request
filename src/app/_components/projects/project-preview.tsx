@@ -21,7 +21,7 @@ export const ProjectPreview: FC<ProjectPreviewProps> = (props) => {
       href={`/project/${props.project.id}`}
       className={`${
         props.fullWidth ? "w-full" : "w-[32.6%]"
-      } rounded-lg ring-slate-700 transition duration-100 hover:ring`}
+      } hoverable-card rounded-lg`}
     >
       <Card>
         <Inset clip="padding-box" side="top" pb="current">
@@ -39,7 +39,7 @@ export const ProjectPreview: FC<ProjectPreviewProps> = (props) => {
               </div>
               <div className="flex flex-row items-center gap-2">
                 <ChatBubbleIcon />
-                <Text as="p">5</Text>
+                <Text as="p">{props.project.features.length}</Text>
               </div>
             </div>
           </div>

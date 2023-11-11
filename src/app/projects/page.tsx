@@ -5,6 +5,7 @@ import { getServerAuthSession } from "~/server/auth";
 import { redirect } from "next/navigation";
 import { getPageAndLimit } from "~/lib/utils";
 import { List } from "../_components/layout/list";
+import { CreateProjectButtonButton } from "../_components/projects/create-project-button";
 
 const getPagedForUser = cache(
   async (limit: number, offset: number, userId: string) => {
@@ -40,6 +41,7 @@ export default async function Projects({
         page={page ?? 1}
         limit={limit ?? 10}
         allCount={allCount[0]!.count ?? 1}
+        createButton={session?.user ? <CreateProjectButtonButton /> : <></>}
       >
         <ProjectList projects={projects} />
       </List>

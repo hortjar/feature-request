@@ -1,5 +1,10 @@
 import { Heading } from "@radix-ui/themes";
-import { type FC, type PropsWithChildren, Suspense } from "react";
+import {
+  type FC,
+  type PropsWithChildren,
+  Suspense,
+  type ReactNode,
+} from "react";
 import { ListAlignments } from "./list-alignments";
 import { Pagination } from "./pagination";
 
@@ -8,6 +13,7 @@ interface ListProps extends PropsWithChildren {
   page: number;
   limit: number;
   allCount: number;
+  createButton?: ReactNode;
 }
 
 export const List: FC<ListProps> = (props) => {
@@ -17,7 +23,10 @@ export const List: FC<ListProps> = (props) => {
         <Heading as="h2" size={"5"}>
           {props.title}
         </Heading>
-        <ListAlignments />
+        <div className="flex flex-row items-center justify-end gap-3">
+          {props.createButton}
+          <ListAlignments />
+        </div>
       </div>
       <Suspense fallback={<div>Loading!</div>}>{props.children}</Suspense>
       <Pagination

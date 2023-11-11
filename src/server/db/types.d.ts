@@ -19,6 +19,7 @@ export type Rating =
 
 export type Project = InferSelectModel<typeof projects> & {
   createdBy: User;
+  features: Array<{ id: string }>;
 };
 export type Feature = InferSelectModel<typeof features> & {
   createdBy: User;
