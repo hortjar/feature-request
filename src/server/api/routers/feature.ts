@@ -51,6 +51,47 @@ export const featureRouter = createTRPCRouter({
             createdById: true,
           },
         },
+        asignees: {
+          columns: {
+            id: true,
+            userId: true,
+          },
+          with: {
+            user: {
+              columns: {
+                id: true,
+                image: true,
+                name: true,
+              },
+            },
+          },
+        },
+        comments: {
+          columns: {
+            id: true,
+            content: true,
+            featureId: true,
+            createdAt: true,
+            userId: true,
+            updatedAt: true,
+          },
+          with: {
+            user: {
+              columns: {
+                id: true,
+                image: true,
+                name: true,
+              },
+            },
+          },
+        },
+        createdBy: {
+          columns: {
+            id: true,
+            image: true,
+            name: true,
+          },
+        },
       },
     });
   }),
