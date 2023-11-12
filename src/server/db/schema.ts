@@ -3,6 +3,7 @@ import {
   bigint,
   index,
   int,
+  mysqlEnum,
   mysqlTableCreator,
   primaryKey,
   smallint,
@@ -54,6 +55,12 @@ export const features = mysqlTable(
     name: varchar("name", { length: 255 }).notNull(),
     content: text("content").notNull(),
     projectId: varchar("projectId", { length: 31 }).notNull(),
+    status: mysqlEnum("status", [
+      "Pending",
+      "In Progress",
+      "Rejected",
+      "Completed",
+    ]).default("Pending"),
     createdById: varchar("createdById", { length: 255 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
@@ -76,6 +83,8 @@ export const featuresRelations = relations(features, ({ one, many }) => ({
     references: [projects.id],
   }),
   ratings: many(ratings),
+  asignees: many(userFeatureAsignees),
+  comments: many(featureComments),
 }));
 
 export const ratings = mysqlTable(
@@ -95,7 +104,7 @@ export const ratings = mysqlTable(
   }),
 );
 
-export const ratingssRelations = relations(ratings, ({ one }) => ({
+export const ratingsRelations = relations(ratings, ({ one }) => ({
   createdBy: one(users, {
     fields: [ratings.createdById],
     references: [users.id],
@@ -105,6 +114,79 @@ export const ratingssRelations = relations(ratings, ({ one }) => ({
     references: [features.id],
   }),
 }));
+
+export const featureComments = mysqlTable("featureComments", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  userId: varchar("userId", { length: 255 }).notNull().primaryKey(),
+  featureId: varchar("featureId", { length: 255 }).notNull().primaryKey(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt").onUpdateNow(),
+});
+
+export const featureCommentsRelations = relations(
+  featureComments,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [featureComments.userId],
+      references: [users.id],
+    }),
+    feature: one(features, {
+      fields: [featureComments.featureId],
+      references: [features.id],
+    }),
+  }),
+);
+
+export const featureTags = mysqlTable("featureTag", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  createdUserId: varchar("createdUserId", { length: 255 })
+    .notNull()
+    .primaryKey(),
+  featureId: varchar("featureId", { length: 255 }).notNull().primaryKey(),
+  content: varchar("content", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt").onUpdateNow(),
+});
+
+export const featureTagsRelations = relations(featureTags, ({ one }) => ({
+  user: one(users, {
+    fields: [featureTags.createdUserId],
+    references: [users.id],
+  }),
+  feature: one(features, {
+    fields: [featureTags.featureId],
+    references: [features.id],
+  }),
+}));
+
+export const userFeatureAsignees = mysqlTable("userFeatureAsignee", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  userId: varchar("userId", { length: 255 }).notNull().primaryKey(),
+  featureId: varchar("featureId", { length: 255 }).notNull().primaryKey(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt").onUpdateNow(),
+});
+
+export const userFeatureAsigneesRelations = relations(
+  userFeatureAsignees,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [userFeatureAsignees.userId],
+      references: [users.id],
+    }),
+    feature: one(features, {
+      fields: [userFeatureAsignees.featureId],
+      references: [features.id],
+    }),
+  }),
+);
 
 export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
