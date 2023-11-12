@@ -40,6 +40,21 @@ export const featureRouter = createTRPCRouter({
     });
   }),
 
+  getById: publicProcedure.input(schemas.id).query(({ ctx, input }) => {
+    return ctx.db.query.features.findFirst({
+      where: (features, { eq }) => eq(features.id, input),
+      with: {
+        ratings: {
+          columns: {
+            id: true,
+            value: true,
+            createdById: true,
+          },
+        },
+      },
+    });
+  }),
+
   getForProject: publicProcedure.input(schemas.id).query(({ ctx, input }) => {
     return ctx.db.query.features.findMany({
       where: (features, { eq }) => eq(features.projectId, input),

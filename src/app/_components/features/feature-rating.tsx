@@ -3,7 +3,8 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
-import { type FC } from "react";
+import { type HTMLAttributes, type FC } from "react";
+import { merge } from "~/lib/utils";
 import { type Rating } from "~/server/db/types";
 import { api } from "~/trpc/react";
 
@@ -13,7 +14,9 @@ interface FeatureRating {
   featureId: string;
 }
 
-export const FeatureRating: FC<FeatureRating> = (props) => {
+export const FeatureRating: FC<
+  FeatureRating & HTMLAttributes<HTMLDivElement>
+> = (props) => {
   const router = useRouter();
 
   const iconSize = 26;
@@ -67,7 +70,12 @@ export const FeatureRating: FC<FeatureRating> = (props) => {
   }
 
   return (
-    <div className="mx-8 flex h-28 flex-col items-center justify-center gap-3">
+    <div
+      className={merge(
+        "mx-8 flex h-28 flex-col items-center justify-center gap-3",
+        props.className,
+      )}
+    >
       <IconButton
         variant="ghost"
         radius="full"
