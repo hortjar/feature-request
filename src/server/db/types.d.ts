@@ -39,8 +39,11 @@ export type FeatureComment = InferSelectModel<typeof featureComments> & {
 
 export type FeatureAsignee = { id: string; userId: string; user: UserSimple };
 
-export type FeatureStatus =
-  | "Pending"
-  | "In Progress"
-  | "Rejected"
-  | "Completed";
+export const FeatureStatusStyles = {
+  Pending: "bg-gray-500",
+  "In Progress": "bg-indigo-500",
+  Rejected: "bg-red-500",
+  Completed: "bg-green-600",
+};
+
+export type FeatureStatus = keyof typeof FeatureStatusStyles;

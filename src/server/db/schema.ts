@@ -12,6 +12,7 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core";
 import { type AdapterAccount } from "next-auth/adapters";
+import { type FeatureStatus } from "./types.d";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -55,12 +56,7 @@ export const features = mysqlTable(
     name: varchar("name", { length: 255 }).notNull(),
     content: text("content").notNull(),
     projectId: varchar("projectId", { length: 31 }).notNull(),
-    status: mysqlEnum("status", [
-      "Pending",
-      "In Progress",
-      "Rejected",
-      "Completed",
-    ]).default("Pending"),
+    status: text("status").$type<FeatureStatus>().default("Pending"),
     createdById: varchar("createdById", { length: 255 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)

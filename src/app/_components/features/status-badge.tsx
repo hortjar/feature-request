@@ -1,7 +1,7 @@
-import { HTMLAttributes, type FC } from "react";
+import { type HTMLAttributes, type FC } from "react";
 import { Text } from "@radix-ui/themes";
-import { type FeatureStatus } from "~/server/db/types";
-import { VariantProps, cva } from "class-variance-authority";
+import { FeatureStatusStyles } from "~/server/db/types.d";
+import { type VariantProps, cva } from "class-variance-authority";
 import { merge } from "~/lib/utils";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -11,12 +11,7 @@ interface StatusBadgeProps
 
 const statusBadge = cva("StatusBadge", {
   variants: {
-    status: {
-      Pending: ["bg-gray-500"],
-      "In Progress": ["bg-indigo-500"],
-      Rejected: ["bg-red-500"],
-      Completed: ["bg-green-600"],
-    },
+    status: FeatureStatusStyles,
   },
   defaultVariants: {
     status: "Pending",
