@@ -20,16 +20,14 @@ const statusBadge = cva("StatusBadge", {
 
 export const StatusBadge: FC<StatusBadgeProps> = (props) => {
   return (
-    <div className="flex flex-row gap-3">
-      <Text weight={"bold"}>Status:</Text>
-      <div
-        className={merge(
-          "py rounded-md px-3",
-          statusBadge({ status: props.status }),
-        )}
-      >
-        <Text>{props.status}</Text>
-      </div>
+    <div
+      className={merge(
+        "py rounded-md px-3",
+        statusBadge({ status: props.status }),
+        props.className,
+      )}
+    >
+      <Text>{props.status}</Text>
     </div>
   );
 };
