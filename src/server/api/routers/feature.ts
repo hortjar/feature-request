@@ -7,7 +7,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { features } from "~/server/db/schema";
+import { featureComments, features } from "~/server/db/schema";
 
 export const featureRouter = createTRPCRouter({
   create: protectedProcedure
@@ -84,6 +84,9 @@ export const featureRouter = createTRPCRouter({
               },
             },
           },
+          orderBy: (featureComments, { desc }) => [
+            desc(featureComments.createdAt),
+          ],
         },
         createdBy: {
           columns: {
@@ -117,4 +120,21 @@ export const featureRouter = createTRPCRouter({
       },
     });
   }),
+
+  submitComment: protectedProcedure
+    .input(
+      z.object({
+        content: schemas.content,
+        featureId: schemas.id,
+        userId: schemas.userId,
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.insert(featureComments).values({
+        content: input.content,
+        id: createId(),
+        featureId: input.featureId,
+        userId: input.userId,
+      });
+    }),
 });

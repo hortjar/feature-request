@@ -10,7 +10,7 @@ interface CommentListProps {
 
 export const CommentList: FC<CommentListProps> = (props) => {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-7">
       {props.comments.map((x) => (
         <div key={x.id} className="flex flex-col gap-3">
           <div className="flex flex-row items-center gap-2">

@@ -4,6 +4,7 @@ import { AsigneeList } from "~/app/_components/features/asignee-list";
 import { CommentList } from "~/app/_components/features/comment-list";
 import { FeatureRating } from "~/app/_components/features/feature-rating";
 import { StatusBadge } from "~/app/_components/features/status-badge";
+import { SubmitComment } from "~/app/_components/features/submit-comment";
 import { UserSimple } from "~/app/_components/layout/user-simple";
 import { schemas } from "~/lib/zod-schemas";
 import { getServerAuthSession } from "~/server/auth";
@@ -47,6 +48,9 @@ export default async function Feature({
           <Heading as="h2" size={"5"}>
             Comments
           </Heading>
+          {session?.user && (
+            <SubmitComment userId={session.user.id} featureId={feature.id} />
+          )}
           <CommentList comments={feature.comments} />
         </div>
       </div>
