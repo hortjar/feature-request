@@ -1,6 +1,5 @@
 import { type HTMLAttributes, type FC } from "react";
 import { Text } from "@radix-ui/themes";
-import { FeatureStatusStyles } from "~/server/db/types.d";
 import { type VariantProps, cva } from "class-variance-authority";
 import { merge } from "~/lib/utils";
 
@@ -11,7 +10,12 @@ interface StatusBadgeProps
 
 const statusBadge = cva("StatusBadge", {
   variants: {
-    status: FeatureStatusStyles,
+    status: {
+      Pending: "bg-gray-500",
+      "In Progress": "bg-indigo-500",
+      Rejected: "bg-red-500",
+      Completed: "bg-green-600",
+    },
   },
   defaultVariants: {
     status: "Pending",
