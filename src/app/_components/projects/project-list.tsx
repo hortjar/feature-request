@@ -4,7 +4,7 @@ import { type Project } from "~/server/db/types";
 import { ProjectPreview } from "./project-preview";
 import { useSearchParams } from "next/navigation";
 import { getAndSetDefaultAlignment } from "~/lib/utils";
-import { type FC } from "react";
+import { useEffect, type FC, useState } from "react";
 
 interface ProjectListProps {
   projects: Project[];
@@ -12,9 +12,12 @@ interface ProjectListProps {
 
 export const ProjectList: FC<ProjectListProps> = (props) => {
   const searchParams = useSearchParams();
-  const alignment = getAndSetDefaultAlignment(searchParams);
+  const [alignment, setAlignment] = useState<string>("row");
 
-  console.log("project list alignment", alignment);
+  useEffect(() => {
+    setAlignment(getAndSetDefaultAlignment(searchParams));
+  }, [alignment, searchParams]);
+
   return (
     <>
       <div className={`flex flex-${alignment} flex-wrap gap-3 pb-5`}>

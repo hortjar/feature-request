@@ -4,7 +4,7 @@ import { BoxIcon, DashboardIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { type FC } from "react";
+import { useEffect, type FC, useState } from "react";
 import { createUrlFromObject, getAndSetDefaultAlignment } from "~/lib/utils";
 
 const alignments = [
@@ -16,7 +16,11 @@ export const ListAlignments: FC = () => {
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
-  const alignment = getAndSetDefaultAlignment(searchParams);
+  const [alignment, setAlignment] = useState<string>("row");
+
+  useEffect(() => {
+    setAlignment(getAndSetDefaultAlignment(searchParams));
+  }, [alignment, searchParams]);
 
   return (
     <div className="flex flex-row">
