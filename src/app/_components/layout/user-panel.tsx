@@ -7,8 +7,8 @@ import {
   PersonIcon,
   RocketIcon,
 } from "@radix-ui/react-icons";
-import { Button, DropdownMenu } from "@radix-ui/themes";
-import Link from "next/link";
+import { Button, DropdownMenu, Text } from "@radix-ui/themes";
+import { useRouter } from "next/navigation";
 import { type FC } from "react";
 
 interface UserPanelProps {
@@ -16,7 +16,13 @@ interface UserPanelProps {
 }
 
 export const UserPanel: FC<UserPanelProps> = (props) => {
-  const linkClass = "flex flex-row items-center gap-3";
+  const linkClass =
+    "flex flex-row items-center justify-start gap-3 w-full cursor-pointer";
+  const router = useRouter();
+
+  const navigateToItem = (link: string) => {
+    router.push(link);
+  };
 
   return (
     <DropdownMenu.Root>
@@ -33,30 +39,34 @@ export const UserPanel: FC<UserPanelProps> = (props) => {
         </Button>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        <DropdownMenu.Item>
-          <Link href="/profile" className={linkClass}>
-            <PersonIcon />
-            Profile
-          </Link>
+        <DropdownMenu.Item
+          className={linkClass}
+          onSelect={() => navigateToItem("/profile")}
+        >
+          <PersonIcon />
+          <Text>Profile</Text>
         </DropdownMenu.Item>
-        <DropdownMenu.Item>
-          <Link href="/projects" className={linkClass}>
-            <RocketIcon />
-            Projects
-          </Link>
+        <DropdownMenu.Item
+          className={linkClass}
+          onSelect={() => navigateToItem("/projects")}
+        >
+          <RocketIcon />
+          Projects
         </DropdownMenu.Item>
-        <DropdownMenu.Item>
-          <Link href="/features" className={linkClass}>
-            <ChatBubbleIcon />
-            Features
-          </Link>
+        <DropdownMenu.Item
+          className={linkClass}
+          onSelect={() => navigateToItem("/features")}
+        >
+          <ChatBubbleIcon />
+          Features
         </DropdownMenu.Item>
         <DropdownMenu.Separator />
-        <DropdownMenu.Item>
-          <Link href="/api/auth/signout" className={linkClass}>
-            <ExitIcon />
-            Sign Out
-          </Link>
+        <DropdownMenu.Item
+          className={linkClass}
+          onSelect={() => navigateToItem("/api/auth/signout")}
+        >
+          <ExitIcon />
+          Sign Out
         </DropdownMenu.Item>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
