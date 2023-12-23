@@ -14,6 +14,7 @@ interface ListProps extends PropsWithChildren {
   limit: number;
   allCount: number;
   createButton?: ReactNode;
+  searchParams: URLSearchParams;
 }
 
 export const List: FC<ListProps> = (props) => {
@@ -25,7 +26,7 @@ export const List: FC<ListProps> = (props) => {
         </Heading>
         <div className="flex flex-row items-center justify-end gap-3">
           {props.createButton}
-          <ListAlignments />
+          <ListAlignments searchParams={props.searchParams} />
         </div>
       </div>
       <Suspense fallback={<div>Loading!</div>}>{props.children}</Suspense>

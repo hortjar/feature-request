@@ -19,7 +19,9 @@ export default async function Home({
 }: {
   searchParams: Record<string, string>;
 }) {
-  const [page, limit] = getPageAndLimit(new URLSearchParams(searchParams));
+  const params = new URLSearchParams(searchParams);
+  console.log(params);
+  const [page, limit] = getPageAndLimit(params);
   const projects = await getPaged(limit!, page!);
   const allCount = (await api.project.getAllCount.query()) as Array<
     Record<string, number>
@@ -32,6 +34,7 @@ export default async function Home({
         page={page ?? 1}
         limit={limit ?? 10}
         allCount={allCount[0]!.count ?? 1}
+        searchParams={params}
         createButton={session?.user ? <CreateProjectButtonButton /> : <></>}
       >
         <ProjectList projects={projects} />

@@ -18,30 +18,47 @@ const getPagedForUser = cache(
   },
 );
 
+const getPaged = cache(async (limit: number, offset: number) => {
+  const projects = await api.project.getPaged.query({
+    limit,
+    offset,
+  });
+  return projects;
+});
+
 export default async function Projects({
   searchParams,
 }: {
   searchParams: Record<string, string>;
 }) {
+  const params = new URLSearchParams(searchParams);
   const session = await getServerAuthSession();
+  const [page, limit] = getPageAndLimit(params);
+  const shouldGetAll = !session?.user || searchParams.type == "all";
 
-  if (!session?.user) {
-    redirect("/");
+  let projects;
+  let allCount;
+  if (shouldGetAll) {
+    projects = await getPaged(limit!, page!);
+    allCount = (await api.project.getAllCount.query()) as Array<
+      Record<string, number>
+    >;
+  } else {
+    projects = await getPagedForUser(limit!, page!, session.user.id);
+    allCount = (await api.project.getAllCountForUser.query(
+      session.user.id,
+    )) as Array<Record<string, number>>;
   }
 
-  const [page, limit] = getPageAndLimit(new URLSearchParams(searchParams));
-  const projects = await getPagedForUser(limit!, page!, session.user.id);
-  const allCount = (await api.project.getAllCountForUser.query(
-    session.user.id,
-  )) as Array<Record<string, number>>;
   return (
     <main className="flex flex-col gap-3 pb-7">
       <List
-        title="Your Projects"
+        title={shouldGetAll ? "All Projects" : "Your Projects"}
         page={page ?? 1}
         limit={limit ?? 10}
         allCount={allCount[0]!.count ?? 1}
         createButton={session?.user ? <CreateProjectButtonButton /> : <></>}
+        searchParams={params}
       >
         <ProjectList projects={projects} />
       </List>

@@ -3,7 +3,7 @@
 import { BoxIcon, DashboardIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, type FC, useState } from "react";
 import { createUrlFromObject, getAndSetDefaultAlignment } from "~/lib/utils";
 
@@ -12,15 +12,18 @@ const alignments = [
   { align: "row", icon: <DashboardIcon /> },
 ];
 
-export const ListAlignments: FC = () => {
+interface ListAlignmentProps {
+  searchParams: URLSearchParams;
+}
+
+export const ListAlignments: FC<ListAlignmentProps> = (props) => {
   const pathname = usePathname();
 
-  const searchParams = useSearchParams();
   const [alignment, setAlignment] = useState<string>("row");
 
   useEffect(() => {
-    setAlignment(getAndSetDefaultAlignment(searchParams));
-  }, [alignment, searchParams]);
+    setAlignment(getAndSetDefaultAlignment(props.searchParams));
+  }, [alignment, props.searchParams]);
 
   return (
     <div className="flex flex-row">
@@ -28,7 +31,7 @@ export const ListAlignments: FC = () => {
         return (
           <Link
             key={x.align}
-            href={createUrlFromObject(pathname, searchParams, {
+            href={createUrlFromObject(pathname, props.searchParams, {
               align: x.align,
             })}
           >

@@ -35,6 +35,10 @@ export const createUrlFromObject = (
 export const getAndSetDefaultAlignment = (
   searchParams: URLSearchParams | ReadonlyURLSearchParams,
 ) => {
+  // passing URLSearchParams from server component to client component causes it to be serialized as array
+  // instead of retyping it in every component it is retyped in utils
+  searchParams = new URLSearchParams(searchParams);
+
   let defaultAlign = "row";
   if (typeof window !== "undefined") {
     defaultAlign = localStorage.getItem("align") ?? "row";

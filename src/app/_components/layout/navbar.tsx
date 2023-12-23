@@ -1,4 +1,4 @@
-import { Button, Container, Heading } from "@radix-ui/themes";
+import { Button, Container, Heading, Text } from "@radix-ui/themes";
 import { getServerAuthSession } from "~/server/auth";
 import { UserPanel } from "./user-panel";
 import Link from "next/link";
@@ -15,6 +15,11 @@ export const Navbar: FC = async () => {
           <Link href="/">
             <Heading size={"7"}>Feature Requests</Heading>
           </Link>
+          <div>
+            <Link href="/projects?type=all">
+              <Text weight={"bold"}>Projects</Text>
+            </Link>
+          </div>
           {session?.user.name != null ? (
             <UserPanel userName={session.user.name} />
           ) : (
